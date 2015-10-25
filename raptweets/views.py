@@ -5,7 +5,7 @@ from .models import Tweet, Album
 from . import engine
 
 def index(request):
-    return HttpResponse('Search for an album')
+    return render(request, 'raptweets/index.html', {})
 
 def graph(request, album_id):
     album = get_object_or_404(Album, pk=album_id)

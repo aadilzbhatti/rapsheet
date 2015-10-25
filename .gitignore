@@ -1,2 +1,4 @@
 secrets.py
 api_key.txt
+*.pyc
+*.xml
