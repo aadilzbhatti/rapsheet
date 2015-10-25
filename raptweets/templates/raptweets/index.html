@@ -5,9 +5,9 @@
     <title>Index</title>
 </head>
 <body>
-    <form action="{% url 'raptweets:graph' album_id %}" method="get">
-        <input type="text" name="search" id="searchbar" value="{{ album.id }}">
-        <label for="searchbar">Search</label><br>
+    <form> for="{% url 'raptweets:graph' album_id %}" action="get">
+        <input type="text" name="search" id="searchbar">
+        <input type="submit" value="Search"><br>
     </form>
 </body>
 </html>
