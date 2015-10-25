@@ -1,6 +1,6 @@
 from TwitterAPI import TwitterAPI
-from alchemyapi import AlchemyAPI
-import secrets
+from . alchemyapi import AlchemyAPI
+from . import secrets
 
 api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['CONSUMER_SECRET'],
@@ -11,8 +11,9 @@ def search(query):
     r = api.request('search/tweets', {'q': query})
     tweets = []
     for tweet in r:
+        date = format_date(tweet['created_at'])
         tweets.append({
-            'date': tweet['created_at'],
+            'date': date,
             'text': tweet['text']
         })
     return tweets
@@ -24,7 +25,7 @@ def get_sentiment(tweets):
         sentiment_tweets.append({
             'date': tweet['date'],
             'text': tweet['text'],
-            'sentiment': tweet['sentiment']
+            'sentiment': s
         })
     return sentiment_tweets
 
@@ -37,3 +38,7 @@ def sentiment(tweet):
         return 0
     return float(response['docSentiment']['score'])
 
+def format_date(date):
+    import dateutil.parser as parser
+    date = parser.parse(date)
+    return date.isoformat()

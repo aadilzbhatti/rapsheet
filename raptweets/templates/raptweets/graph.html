@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Graph</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
+</head>
+<body>
+    <div class="tweets">
+    {% for tweet in dump %}
+        <div id="tweet">
+            Tweet: {{  tweet.text }} <br>
+            Date: {{ tweet.pub_date }} <br>
+            Sentiment: {{ tweet.sentiment }}
+        </div>
+    {% endfor %}
+    </div>
+</body>
+</html>
