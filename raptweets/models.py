@@ -21,3 +21,5 @@ class Album(models.Model):
 
     def __str__(self):
         return self.artist + ' - ' + self.title
+
+# TODO add artists, songs as well

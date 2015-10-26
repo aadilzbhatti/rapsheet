@@ -6,10 +6,12 @@ from . import engine
 def index(request):
     return render_to_response('raptweets/index.html')
 
+# TODO be able to search for albums by title
 def search(request, album_title):
     album = get_object_or_404(Album, title=album_title)
     return graph(request, album.id)
 
+# TODO graph visualization, album artwork
 def graph(request, album_id=0):
     if album_id != 0:
         album = get_object_or_404(Album, pk=album_id)
