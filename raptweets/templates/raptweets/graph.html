@@ -11,7 +11,7 @@
 <body>
     <h1>Tweets for {{ album.artist }} - {{ album.title }}</h1>
     <div class="tweets">
-    {% for tweet in dump %}
+    {% for tweet in tweets %}
         <div id="tweet">
             Tweet: {{  tweet.text }} <br>
             Date: {{ tweet.pub_date }} <br>

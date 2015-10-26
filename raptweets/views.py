@@ -16,10 +16,18 @@ def graph(request, album_id=0):
     if album_id != 0:
         album = get_object_or_404(Album, pk=album_id)
     tweets = engine.get_sentiment(engine.search(album.title))
-    dump = []
     for tweet in tweets:
-        t = Tweet(text=tweet['text'], sentiment=tweet['sentiment'], pub_date=tweet['date'])
-        if t not in Tweet.objects.all():
+        t = Tweet(text=tweet['text'],
+                  sentiment=tweet['sentiment'],
+                  pub_date=tweet['date'],
+                  album=album)
+        try:
+            Tweet.objects.get(text=t.text)
+        except(KeyError, Tweet.DoesNotExist):
             t.save()
-        dump.append(t)
-    return render(request, 'raptweets/graph.html', {'dump': dump, 'album': album})
+    return render(
+        request, 'raptweets/graph.html', {
+            'tweets': Tweet.objects.filter(album=album),
+            'album': album
+        }
+    )

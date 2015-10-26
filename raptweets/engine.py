@@ -2,6 +2,7 @@ from TwitterAPI import TwitterAPI
 import spotipy
 from . alchemyapi import AlchemyAPI
 from . import secrets
+from .models import Tweet
 
 api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['CONSUMER_SECRET'],
@@ -47,3 +48,9 @@ def format_date(date):
     date = parser.parse(date)
     return date.isoformat()
 
+def average_sentiment_per_day(tweets):
+    dates = []
+    sentiments = {}
+    for tweet in tweets:
+        if tweet.date not in dates:
+            dates.append(tweet.date)
