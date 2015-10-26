@@ -18,6 +18,7 @@ $(document).ready(function() {
     }
 
     var margin = {top: 100, right: 40, bottom: 100, left: 50};
+    var r = 5;
 
     var w = 900 - margin.left - margin.right;
     var h = 600 - margin.top - margin.bottom;
@@ -34,8 +35,7 @@ $(document).ready(function() {
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .tickPadding(10)
-        .ticks(datamap.length - 1)
+        .ticks(Math.max(datamap.length - 1, 1))
         .tickFormat(function(d) {
             return d.toISOString().slice(0, 10);
         });
@@ -49,7 +49,7 @@ $(document).ready(function() {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient("left")
-        .ticks(datamap.length - 1);
+        .ticks(Math.max(datamap.length - 1, 1));
 
     // create svg
     var svg = d3.select("body")
@@ -68,7 +68,51 @@ $(document).ready(function() {
         .attr("cy", function(d) {
             return yScale(d[1]);
         })
-        .attr("r", 5);
+        .attr("r", r);
+        //.on("mouseover", function() {
+        //    var circle = d3.select(this);
+        //    circle.transition()
+        //        .duration(200)
+        //        .attr("r", r * 6);
+        //})
+        //.on("mouseout", function() {
+        //    var circle = d3.select(this);
+        //    circle.transition()
+        //        .duration(200)
+        //        .attr("r", r);
+        //})
+        //.on("click", function() {
+        //
+        //});
+
+    svg.selectAll("text")
+        .data(datamap)
+        .enter()
+        .append("text")
+        .text(function(d) {
+            return d[1] + "";
+        })
+        .attr("x", function(d) {
+            return xScale(d[0]) + 50;
+        })
+        .attr("y", function(d) {
+            return yScale(d[1]);
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11px")
+        .attr("fill", "red")
+        .on("mouseover", function() {
+            var text = d3.select(this);
+            text.transition()
+                .duration(200)
+                .attr("font-size", "22px");
+        })
+        .on("mouseout", function() {
+            var text = d3.select(this)
+            text.transition()
+                .duration(200)
+                .attr("font-size", "11px");
+        });
 
     // add x-axis
     svg.append("g")
