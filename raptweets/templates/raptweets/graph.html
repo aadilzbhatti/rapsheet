@@ -7,12 +7,14 @@
     <title>Graph</title>
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="{% static 'raptweets/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'raptweets/jquery-2.1.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'raptweets/d3.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'raptweets/script.js' %}"></script>
+    <script type="text/javascript" src="{% static 'raptweets/graph.js' %}"></script>
 </head>
 <body>
-    <h1>Graph for {{ album.title }} - {{ album.artist }}</h1>
-    <p>{{ avg }}</p>
+    <h2>Graph for {{ album.title }} - {{ album.artist }}</h2>
+    <div id="avg">
+        {{ avg }}
+    </div>
 </body>
 </html>
