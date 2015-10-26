@@ -1,4 +1,5 @@
 from TwitterAPI import TwitterAPI
+import spotipy
 from . alchemyapi import AlchemyAPI
 from . import secrets
 
@@ -8,14 +9,17 @@ api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['ACCESS_SECRET'])
 
 def search(query):
-    r = api.request('search/tweets', {'q': query})
+    r = api.request('search/tweets', {'q': query, 'lang': 'en'})
     tweets = []
+    text = []
     for tweet in r:
         date = format_date(tweet['created_at'])
-        tweets.append({
-            'date': date,
-            'text': tweet['text']
-        })
+        if tweet['text'] not in text:
+            tweets.append({
+                'date': date,
+                'text': tweet['text']
+            })
+            text.append(tweet['text'])
     return tweets
 
 def get_sentiment(tweets):
@@ -42,3 +46,4 @@ def format_date(date):
     import dateutil.parser as parser
     date = parser.parse(date)
     return date.isoformat()
+

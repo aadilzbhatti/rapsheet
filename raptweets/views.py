@@ -7,13 +7,13 @@ from . import engine
 def index(request):
     return render_to_response('raptweets/index.html')
 
-def graph(request, album_id=0, album_title=''):
+def search(request, album_title):
+    album = get_object_or_404(Album, title=album_title)
+    return graph(request, album.id)
+
+def graph(request, album_id=0):
     if album_id != 0:
         album = get_object_or_404(Album, pk=album_id)
-    elif album_title != '':
-        album = get_object_or_404(Album, pk=Album.objects.get(title=album_title).id)
-    else:
-        album = None
     tweets = engine.get_sentiment(engine.search(album.title))
     dump = []
     for tweet in tweets:
@@ -21,4 +21,4 @@ def graph(request, album_id=0, album_title=''):
         if t not in Tweet.objects.all():
             t.save()
         dump.append(t)
-    return render(request, 'raptweets/graph.html', {'dump': dump})
+    return render(request, 'raptweets/graph.html', {'dump': dump, 'album': album})
