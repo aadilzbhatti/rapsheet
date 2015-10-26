@@ -48,9 +48,20 @@ def format_date(date):
     date = parser.parse(date)
     return date.isoformat()
 
+def easy_date(date):
+    return ' '.join(date.ctime().split()[0:3])
+
 def average_sentiment_per_day(tweets):
-    dates = []
     sentiments = {}
+    vals = {}
     for tweet in tweets:
-        if tweet.date not in dates:
-            dates.append(tweet.date)
+        date = easy_date(tweet.pub_date)
+        if date not in sentiments:
+            sentiments[date] = tweet.sentiment
+            vals[date] = 1
+        else:
+            sentiments[date] += tweet.sentiment
+            vals[date] += 1
+    for key in sentiments:
+        sentiments[key] /= vals[key]
+    return sentiments

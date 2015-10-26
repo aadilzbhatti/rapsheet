@@ -9,10 +9,10 @@ def index(request):
 # TODO be able to search for albums by title
 def search(request, album_title):
     album = get_object_or_404(Album, title=album_title)
-    return graph(request, album.id)
+    return tweets(request, album.id)
 
 # TODO graph visualization, album artwork
-def graph(request, album_id=0):
+def tweets(request, album_id=0):
     if album_id != 0:
         album = get_object_or_404(Album, pk=album_id)
     tweets = engine.get_sentiment(engine.search(album.title))
@@ -25,9 +25,11 @@ def graph(request, album_id=0):
             Tweet.objects.get(text=t.text)
         except(KeyError, Tweet.DoesNotExist):
             t.save()
+    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))
     return render(
         request, 'raptweets/graph.html', {
             'tweets': Tweet.objects.filter(album=album),
-            'album': album
+            'album': album,
+            'avg': avg
         }
     )
