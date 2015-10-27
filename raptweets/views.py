@@ -1,6 +1,4 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponse
-from django.core.urlresolvers import reverse
-from django.db.models import Q
 
 from .models import Tweet, Album
 from . import engine
@@ -8,6 +6,8 @@ from . import engine
 def index(request):
     return render_to_response('raptweets/index.html')
 
+
+# TODO more intelligent search
 def search(request):
     query = request.GET.get('album_title')
     if query:
