@@ -1,4 +1,7 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponse
+from django.utils import timezone
+
+import spotipy
 
 from .models import Tweet, Album
 from . import engine
@@ -6,8 +9,6 @@ from . import engine
 def index(request):
     return render_to_response('raptweets/index.html')
 
-
-# TODO more intelligent search
 def search(request):
     query = request.GET.get('album_title')
     if query:
@@ -16,6 +17,12 @@ def search(request):
             title = titles[query.lower()].title
             album = get_object_or_404(Album, title=title)
             return graph(request, album.id)
+        else:
+            s = spotify_search(query)
+            if s:
+                album = Album(title=s[0], artist=s[1], release_date=timezone.now(), sales=0)
+                album.save()
+                return graph(request, album.id)
     return HttpResponse('404')
 
 def tweets(request, album_id=0):
@@ -68,3 +75,14 @@ def close_titles():
     for i in range(len(a)):
         titles[a[i].title.lower()] = a[i]
     return titles
+
+def spotify_search(query):
+    sp = spotipy.Spotify()
+    result = sp.search(q=query, limit=1)
+    try:
+        title = result['tracks']['items'][0]['album']['name']
+        arr = result['tracks']['items'][0]['artists']
+        artist = ', '.join([arr[i]['name'] for i in range(len(arr))])
+        return title, artist
+    except KeyError:
+        return None

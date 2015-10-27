@@ -12,7 +12,8 @@
     <script type="text/javascript" src="{% static 'raptweets/graph.js' %}"></script>
 </head>
 <body>
-    <h2>Graph for {{ album.title }} - {{ album.artist }}</h2>
+    <h1>Graph for {{ album.title }} - {{ album.artist }}</h1>
+    <h2><a href="{% url 'raptweets:tweets' album.id %}">Tweets for {{ album.title }} - {{ album.artist }}</a></h2>
     <div id="avg">
         {{ avg }}
     </div>
