@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -5,8 +7,9 @@
     <title>Index</title>
 </head>
 <body>
-    <form action='/search/', method="get">
-        <input type="text" name="album_title" id="searchbar">
+    <form action="{% url 'raptweets:search' %}" method="get">
+    {% csrf_token %}
+        <input type="text" name="album_title" id="searchbar" placeholder="search">
         <input type="submit" value="Search"><br>
     </form>
 </body>

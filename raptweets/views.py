@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponse
+from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from .models import Tweet, Album
 from . import engine
@@ -6,13 +8,14 @@ from . import engine
 def index(request):
     return render_to_response('raptweets/index.html')
 
-# TODO be able to search for albums by title
-def search(request, album_title):
-    album = get_object_or_404(Album, title=album_title)
-    return tweets(request, album.id)
+def search(request):
+    query = request.GET.get('album_title')
+    if query:
+        album = get_object_or_404(Album, title=query)
+        return graph(request, album.id)
 
 def tweets(request, album_id=0):
-    album = get_object_or_404(Album, pk=album_id)
+    album = get_object_or_404(Album, pk=album_id)  # Query
     query = engine.get_sentiment(engine.search(album.title))
     for tweet in query:
         t = Tweet(text=tweet['text'],
@@ -20,13 +23,13 @@ def tweets(request, album_id=0):
                   pub_date=tweet['date'],
                   album=album)
         try:
-            Tweet.objects.get(text=t.text)
+            Tweet.objects.get(text=t.text)  # Query
         except(KeyError, Tweet.DoesNotExist):
             t.save()
-    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))
+    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
     return render(
         request, 'raptweets/tweets.html', {
-            'tweets': Tweet.objects.filter(album=album),
+            'tweets': Tweet.objects.filter(album=album),  # Query
             'album': album,
             'avg': avg
         }
@@ -42,11 +45,11 @@ def graph(request, album_id=0):
                       sentiment=tweet['sentiment'],
                       pub_date=tweet['date'],
                       album=album)
-        try:
-            Tweet.objects.get(text=t.text)
-        except(KeyError, Tweet.DoesNotExist):
-            t.save()
-    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))
+            try:
+                Tweet.objects.get(text=t.text)
+            except(KeyError, Tweet.DoesNotExist):
+                t.save()
+    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
     import json
     return render(request, 'raptweets/graph.html', {
         'album': album,
