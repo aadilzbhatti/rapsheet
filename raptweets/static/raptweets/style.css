@@ -1,6 +1,14 @@
+/* elements */
+
 #tweet {
     border: 1px #ccc solid;
 }
+
+.form {
+  text-align:center;
+}
+
+/* Visualization */
 
 .axis path,
 .axis line {
@@ -16,4 +24,33 @@
 
 .svg {
     padding: 50px;
+    border: 1px #ccc solid;
+    display: block;
+    margin:auto;
+}
+
+/* HTML Formatting */
+
+.nav a {
+	color: #000;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-transform: uppercase;
+}
+
+.nav li {
+    display: inline;
+    max-width: 100%;
+}
+
+body {
+    background-color: #0D4F8B;
+}
+
+h1, h2 {
+    text-align: center;
 }

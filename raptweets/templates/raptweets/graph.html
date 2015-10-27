@@ -12,8 +12,18 @@
     <script type="text/javascript" src="{% static 'raptweets/graph.js' %}"></script>
 </head>
 <body>
+    <div class="nav">
+        <div class="container">
+            <ul class="pull-left">
+                <li><a href="{% url 'raptweets:index' %}">Search</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <ul class="pull-right">
+                <li><a href="{% url 'raptweets:tweets' album.id %}">Tweets for this album</a></li>
+            </ul>
+        </div>
+    </div>
     <h1>Graph for {{ album.title }} - {{ album.artist }}</h1>
-    <h2><a href="{% url 'raptweets:tweets' album.id %}">Tweets for {{ album.title }} - {{ album.artist }}</a></h2>
     <div id="avg">
         {{ avg }}
     </div>

@@ -9,10 +9,28 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-    <form action="{% url 'raptweets:search' %}" method="get">
-    {% csrf_token %}
-        <input type="text" name="album_title" id="searchbar" placeholder="search">
-        <input type="submit" value="Search" id="button"><br>
-    </form>
+    <div class="nav">
+        <div class="container">
+            <ul class="pull-left">
+                <li><a href="{% url 'raptweets:index' %}">Home</a></li>
+            </ul>
+            <ul class="pull-right">
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1>RapTweets</h1>
+    <h2>Search for an album to see its graph</h2>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="form">
+                <form action="{% url 'raptweets:search' %}" method="get">
+                    {% csrf_token %}
+                    <input type="text" name="album_title" id="searchbar" placeholder="search">
+                    <input type="submit" value="Search" id="button"><br>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
