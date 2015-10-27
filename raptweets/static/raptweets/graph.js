@@ -31,11 +31,13 @@ $(document).ready(function() {
         .domain([min_date, max_date])
         .range([0, w - 20]);
 
+    console.log(dates);
+
     //x-axis
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(Math.max(datamap.length - 1, 1))
+        .ticks(Math.max(datamap.length, 1))
         .tickPadding(10)
         .tickFormat(function(d) {
             return d.toISOString().slice(0, 10);
@@ -50,7 +52,7 @@ $(document).ready(function() {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient("left")
-        .ticks(Math.max(datamap.length - 1, 1));
+        .ticks(Math.max(datamap.length, 1));
 
     // create svg
     var svg = d3.select("body")

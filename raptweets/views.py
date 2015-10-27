@@ -64,10 +64,11 @@ def close_titles():
 def spotify_search(query):
     sp = spotipy.Spotify()
     result = sp.search(q=query, limit=1)
+    if not result['tracks']['items']:
+        return None
     try:
         title = result['tracks']['items'][0]['album']['name']
-        arr = result['tracks']['items'][0]['artists']
-        artist = ', '.join([arr[i]['name'] for i in range(len(arr))])
+        artist = result['tracks']['items'][0]['artists'][0]['name'] # get first listed artist
         return title, artist
     except KeyError:
         return None
