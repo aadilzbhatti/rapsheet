@@ -10,6 +10,7 @@
 </head>
 <body>
     <h1>Tweets for {{ album.artist }} - {{ album.title }}</h1>
+    <h2><a href="{% url 'raptweets:graph' album.id %}">Graph for {{ album.artist }} - {{ album.title }}</a></h2>
     <div class="tweets">
     {% for tweet in tweets %}
         <div id="tweet">

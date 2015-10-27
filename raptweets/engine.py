@@ -1,8 +1,6 @@
 from TwitterAPI import TwitterAPI
-import spotipy
 from . alchemyapi import AlchemyAPI
 from . import secrets
-from .models import Tweet
 
 api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['CONSUMER_SECRET'],
@@ -26,7 +24,6 @@ def search(query):
 def get_sentiment(tweets):
     sentiment_tweets = []
     for tweet in tweets:
-        print(tweet['text'])
         s = sentiment(tweet['text'])
         sentiment_tweets.append({
             'date': tweet['date'],

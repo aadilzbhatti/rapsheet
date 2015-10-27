@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response, Http
 from django.utils import timezone
 
 import spotipy
+import json
 
 from .models import Tweet, Album
 from . import engine
@@ -28,16 +29,7 @@ def search(request):
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
-    query = engine.get_sentiment(engine.search(album.title))
-    for tweet in query:
-        t = Tweet(text=tweet['text'],
-                  sentiment=tweet['sentiment'],
-                  pub_date=tweet['date'],
-                  album=album)
-        try:
-            Tweet.objects.get(text=t.text)  # Query
-        except(KeyError, Tweet.DoesNotExist):
-            t.save()
+    search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
     return render(
         request, 'raptweets/tweets.html', {
@@ -52,20 +44,10 @@ def graph(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)
     tw = Tweet.objects.filter(album=album)
     if not tw:
-        query = engine.get_sentiment(engine.search(album.title))
-        for tweet in query:
-            t = Tweet(text=tweet['text'],
-                      sentiment=tweet['sentiment'],
-                      pub_date=tweet['date'],
-                      album=album)
-            try:
-                Tweet.objects.get(text=t.text)
-            except(KeyError, Tweet.DoesNotExist):
-                t.save()
+        search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
     for key in avg:
         avg[key] = "%.2f" % avg[key]
-    import json
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
@@ -89,3 +71,15 @@ def spotify_search(query):
         return title, artist
     except KeyError:
         return None
+
+def search_and_add_tweets(album):
+    query = engine.get_sentiment(engine.search(album.title))
+    for tweet in query:
+        t = Tweet(text=tweet['text'],
+                  sentiment=tweet['sentiment'],
+                  pub_date=tweet['date'],
+                  album=album)
+        try:
+            Tweet.objects.get(text=t.text)
+        except(KeyError, Tweet.DoesNotExist):
+            t.save()
