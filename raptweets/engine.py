@@ -26,6 +26,7 @@ def search(query):
 def get_sentiment(tweets):
     sentiment_tweets = []
     for tweet in tweets:
+        print(tweet['text'])
         s = sentiment(tweet['text'])
         sentiment_tweets.append({
             'date': tweet['date'],
@@ -39,6 +40,8 @@ def sentiment(tweet):
     alchemyapi = AlchemyAPI()
     alchemyapi.apikey = secrets.ALCHEMY_CODES[0]
     response = alchemyapi.sentiment('text', tweet)
+    if response['status'] == 'ERROR':
+        return 0
     if response['docSentiment']['type'] == 'neutral':
         return 0
     return float(response['docSentiment']['score'])

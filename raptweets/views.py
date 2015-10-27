@@ -34,10 +34,20 @@ def tweets(request, album_id=0):
 
 def graph(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)
-    t = Tweet.objects.filter(album=album)
-    avg = engine.average_sentiment_per_day(t)
+    tw = Tweet.objects.filter(album=album)
+    if not tw:
+        query = engine.get_sentiment(engine.search(album.title))
+        for tweet in query:
+            t = Tweet(text=tweet['text'],
+                      sentiment=tweet['sentiment'],
+                      pub_date=tweet['date'],
+                      album=album)
+        try:
+            Tweet.objects.get(text=t.text)
+        except(KeyError, Tweet.DoesNotExist):
+            t.save()
+    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))
     import json
-    # avg = {'Fri Oct 23': -0.5,'Sat Oct 24': 0.5, 'Sun Oct 25': 0.2374928, 'Mon Oct 26': 0.0234880}
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
