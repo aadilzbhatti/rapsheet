@@ -76,6 +76,8 @@ def close_titles():
         titles[a[i].title.lower()] = a[i]
     return titles
 
+# TODO more intelligent spotify queries -- perhaps add more search fields *shudder*
+
 def spotify_search(query):
     sp = spotipy.Spotify()
     result = sp.search(q=query, limit=1)
