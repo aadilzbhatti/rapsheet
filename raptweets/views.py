@@ -25,6 +25,7 @@ def search(request):
                 return graph(request, album.id)
     return HttpResponse('404')
 
+# TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
     query = engine.get_sentiment(engine.search(album.title))
@@ -46,6 +47,7 @@ def tweets(request, album_id=0):
         }
     )
 
+# TODO if tweets already loaded, do not make another query (i.e. coming from tweet view)
 def graph(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)
     tw = Tweet.objects.filter(album=album)
@@ -77,7 +79,6 @@ def close_titles():
     return titles
 
 # TODO more intelligent spotify queries -- perhaps add more search fields *shudder*
-
 def spotify_search(query):
     sp = spotipy.Spotify()
     result = sp.search(q=query, limit=1)
