@@ -11,8 +11,12 @@ def index(request):
 def search(request):
     query = request.GET.get('album_title')
     if query:
-        album = get_object_or_404(Album, title=query)
-        return graph(request, album.id)
+        titles = close_titles()
+        if query.lower() in titles:
+            title = titles[query.lower()].title
+            album = get_object_or_404(Album, title=title)
+            return graph(request, album.id)
+    return HttpResponse('404')
 
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
@@ -55,3 +59,10 @@ def graph(request, album_id=0):
         'album': album,
         'avg': json.dumps(avg)
     })
+
+def close_titles():
+    titles = {}
+    a = Album.objects.all()
+    for i in range(len(a)):
+        titles[a[i].title.lower()] = a[i]
+    return titles
