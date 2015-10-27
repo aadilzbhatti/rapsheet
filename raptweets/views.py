@@ -54,6 +54,8 @@ def graph(request, album_id=0):
             except(KeyError, Tweet.DoesNotExist):
                 t.save()
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
+    for key in avg:
+        avg[key] = "%.2f" % avg[key]
     import json
     return render(request, 'raptweets/graph.html', {
         'album': album,

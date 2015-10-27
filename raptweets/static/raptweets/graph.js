@@ -29,13 +29,14 @@ $(document).ready(function() {
     // x-scale
     var xScale = d3.time.scale()
         .domain([min_date, max_date])
-        .range([0, w]);
+        .range([0, w - 20]);
 
     //x-axis
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
         .ticks(Math.max(datamap.length - 1, 1))
+        .tickPadding(10)
         .tickFormat(function(d) {
             return d.toISOString().slice(0, 10);
         });
@@ -69,21 +70,6 @@ $(document).ready(function() {
             return yScale(d[1]);
         })
         .attr("r", r);
-        //.on("mouseover", function() {
-        //    var circle = d3.select(this);
-        //    circle.transition()
-        //        .duration(200)
-        //        .attr("r", r * 6);
-        //})
-        //.on("mouseout", function() {
-        //    var circle = d3.select(this);
-        //    circle.transition()
-        //        .duration(200)
-        //        .attr("r", r);
-        //})
-        //.on("click", function() {
-        //
-        //});
 
     svg.selectAll("text")
         .data(datamap)
