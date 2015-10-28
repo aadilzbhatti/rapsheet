@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponse
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import json
 
@@ -28,19 +29,30 @@ def search(request):
                 return graph(request, album.id)
     return HttpResponse('404')
 
-# TODO pagination
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
     engine.search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
-    return render(
-        request, 'raptweets/tweets.html', {
-            'tweets': Tweet.objects.filter(album=album),  # Query
+    tweet_list = Tweet.objects.filter(album=album)
+    paginator = Paginator(tweet_list, 10)
+
+    page = request.GET.get('page')
+    try:
+        t = paginator.page(page)
+    except PageNotAnInteger:
+        t = paginator.page(1)
+    except EmptyPage:
+        t = paginator.page(paginator.num_pages)
+
+    return render_to_response('raptweets/tweets.html',
+        {
+            'tweets': t,
             'album': album,
             'avg': avg
         }
     )
+
 
 
 # TODO if tweets already loaded, do not make another query (i.e. coming from tweet view)

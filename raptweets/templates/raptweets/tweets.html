@@ -24,5 +24,20 @@
         </div>
     {% endfor %}
     </div>
+    <div class="pagination">
+        <span class="step-links">
+            <ul class="pager">
+                {% if tweets.has_previous %}
+                    <a href="?page={{ tweets.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}
+                </span>
+                {% if tweets.has_next %}
+                    <a href="?page={{ tweets.next_page_number }}">next</a>
+                {% endif %}
+            </ul>
+        </span>
+    </div>
 </body>
 </html>
