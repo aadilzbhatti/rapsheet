@@ -29,7 +29,7 @@ $(document).ready(function() {
     // x-scale
     var xScale = d3.time.scale()
         .domain([min_date, max_date])
-        .range([0, w - 20]);
+        .range([0, w - 20 * datamap.length]);
 
     console.log(dates);
 

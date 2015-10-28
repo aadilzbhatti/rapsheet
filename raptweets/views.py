@@ -16,7 +16,7 @@ def search(request):
         s = engine.spotify_search(query)
         if s:
             if s[0].lower() in titles:
-                title = titles[query.lower()].title
+                title = titles[s[0].lower()].title
                 album = get_object_or_404(Album, title=title)
                 return graph(request, album.id)
             else:

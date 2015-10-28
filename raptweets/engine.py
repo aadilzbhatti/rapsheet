@@ -112,7 +112,9 @@ def format_title(title):
         '[Platinum',
         '(Remastered)',
         'Remaster)',
-        '(2002 -',
+        '(2002',
+        '(2011',
+        '-',
         '(Legacy'
     ]
     for word in fluff:
