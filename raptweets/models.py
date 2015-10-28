@@ -3,8 +3,7 @@ from django.db import models
 class Album(models.Model):
     title = models.CharField(max_length=100)
     artist = models.CharField(max_length=100)
-    release_date = models.DateTimeField()
-    sales = models.IntegerField()
+    # tweets
 
     def __str__(self):
         return self.artist + ' - ' + self.title
