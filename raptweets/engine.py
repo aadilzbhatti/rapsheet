@@ -1,6 +1,11 @@
 from TwitterAPI import TwitterAPI
+import spotipy
+
 from . alchemyapi import AlchemyAPI
 from . import secrets
+
+from .models import Tweet, Album
+
 
 api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['CONSUMER_SECRET'],
@@ -65,3 +70,59 @@ def average_sentiment_per_day(tweets):
     for key in sentiments:
         sentiments[key] /= vals[key]
     return sentiments
+
+# TODO more intelligent spotify queries -- perhaps add more search fields *shudder*
+def spotify_search(query):
+    sp = spotipy.Spotify()
+    result = sp.search(q=query, limit=1)
+    if not result['tracks']['items']:
+        return None
+    try:
+        title = format_title(result['tracks']['items'][0]['album']['name'])
+        artist = result['tracks']['items'][0]['artists'][0]['name']  # get first listed artist
+        return title, artist
+    except KeyError:
+        return None
+
+def search_and_add_tweets(album):
+    query = get_sentiment(search(album.title))
+    for tweet in query:
+        t = Tweet(text=tweet['text'],
+                  sentiment=tweet['sentiment'],
+                  pub_date=tweet['date'],
+                  album=album)
+        try:
+            Tweet.objects.get(text=t.text)
+        except(KeyError, Tweet.DoesNotExist):
+            t.save()
+
+def format_title(title):
+    low = title.split()
+    fluff = [
+        '(Explicit',
+        'Version)',
+        '(Deluxe',
+        'Explicit',
+        'Eeluxe)',
+        'Deluxe',
+        '[Deluxe',
+        'Edition(Explicit)]',
+        '(Deluxe)',
+        'Edition]',
+        '[Platinum',
+        '(Remastered)',
+        'Remaster)',
+        '(2002 -',
+        '(Legacy'
+    ]
+    for word in fluff:
+        if word in low:
+            low.remove(word)
+    return ' '.join(low)
+
+def close_titles():
+    titles = {}
+    a = Album.objects.all()
+    for i in range(len(a)):
+        titles[a[i].title.lower()] = a[i]
+    return titles
