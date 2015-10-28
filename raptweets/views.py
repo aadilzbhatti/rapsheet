@@ -28,6 +28,7 @@ def search(request):
                 return graph(request, album.id)
     return HttpResponse('404')
 
+# TODO pagination
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
@@ -40,6 +41,7 @@ def tweets(request, album_id=0):
             'avg': avg
         }
     )
+
 
 # TODO if tweets already loaded, do not make another query (i.e. coming from tweet view)
 def graph(request, album_id=0):
