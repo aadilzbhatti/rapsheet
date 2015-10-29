@@ -26,7 +26,7 @@ Install `brew`:
     
 Install `Python(3.4)`:
     
-    `brew install python3
+    brew install python3
 
 To check if this worked, run the command `python3` in your terminal. If the Python 3 console comes up,
 you have succeeded. 
@@ -40,10 +40,7 @@ and run
  
     pip install -r requirements.txt
     
-This will install the dependencies used by the app if you do not already have them. Then, all 
-you need to do is run
-
-    python3 manage.py runserver
+This will install the dependencies used by the app if you do not already have them. 
     
 You will also need the d3.js and jquery.js files. Once you have downloaded these, place them in the 
 `raptweets/static/raptweets folder`. You will then need an AlchemyAPI key as well as TwitterAPI keys, 
