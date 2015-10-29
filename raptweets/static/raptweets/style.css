@@ -22,11 +22,12 @@
     font-size: 11px;
 }
 
-.svg {
+.graph {
     padding: 50px;
     border: 1px #ccc solid;
     display: block;
     margin:auto;
+    text-align:center;
 }
 
 /* HTML Formatting */
@@ -55,6 +56,6 @@ h1, h2 {
     text-align: center;
 }
 
-.pagination {
+.page {
     text-align: center;
 }

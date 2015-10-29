@@ -33,8 +33,8 @@ def search(request):
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
     engine.search_and_add_tweets(album)
-    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
-    tweet_list = Tweet.objects.filter(album=album)
+    tweet_list = Tweet.objects.filter(album=album).order_by('-pub_date')
+    avg = engine.average_sentiment_per_day(tweet_list)  # Query
     paginator = Paginator(tweet_list, 10)
 
     page = request.GET.get('page')
@@ -49,7 +49,8 @@ def tweets(request, album_id=0):
         {
             'tweets': t,
             'album': album,
-            'avg': avg
+            'avg': avg,
+            'pages': [num for num in range(1, t.paginator.num_pages)]
         }
     )
 

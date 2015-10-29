@@ -9,12 +9,22 @@ $(document).ready(function() {
 
     var datamap = [];
     var dates = [];
+    var keys = [];
 
     for (var key in data) {
-        var date = new Date(key)
+        var date = new Date(key);
         date.setFullYear(new Date().getFullYear());
-        datamap.push([date, data[key]]);
         dates.push(date);
+        keys.push(key);
+    }
+
+    dates.sort();
+    keys.sort();
+
+    for (var key in dates) {
+        var date = dates[key];
+        var item = keys[key];
+        datamap.push([date, data[item]]);
     }
 
     var margin = {top: 100, right: 40, bottom: 100, left: 50};
@@ -30,8 +40,6 @@ $(document).ready(function() {
     var xScale = d3.time.scale()
         .domain([min_date, max_date])
         .range([0, w - 20 * datamap.length]);
-
-    console.log(dates);
 
     //x-axis
     var xAxis = d3.svg.axis()
@@ -55,10 +63,10 @@ $(document).ready(function() {
         .ticks(Math.max(datamap.length, 1));
 
     // create svg
-    var svg = d3.select("body")
+    var svg = d3.select(".graph")
         .append("svg")
-        .attr("width", w)
-        .attr("height", h + 50);
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h + margin.top + margin.bottom);
 
     // add data points
     svg.selectAll("circle")
@@ -102,6 +110,19 @@ $(document).ready(function() {
                 .attr("font-size", "11px");
         });
 
+    // add lines
+    var line = d3.svg.line()
+        .x(function(d) {
+            return xScale(d[0]) + 50;
+        })
+        .y(function(d) {
+            return yScale(d[1]);
+        });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(datamap));
+
     // add x-axis
     svg.append("g")
         .attr("class", "axis")
@@ -111,6 +132,7 @@ $(document).ready(function() {
 
     // add text to x-axis
     svg.append("text")
+        .attr("class", "x-label")
         .attr("x", w/2)
         .attr("y", h + 50)
         .style("text-anchor", "middle")
@@ -126,11 +148,15 @@ $(document).ready(function() {
 
     // add text to y-axis
     svg.append("text")
+        .attr("class", "y-label")
+        .attr("text-anchor", "middle")
+        .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .attr("y", 25)
-        .attr("x", h / 2)
-        .attr("dy", ".1em")
-        .style("text-anchor", "middle")
+        .attr("x", w * 2)
+        .attr("y", h)
         .style("font-family", "Source Sans Pro")
         .text("Sentiment");
+
+    console.log(h/2);
+    console.log(20);
 });

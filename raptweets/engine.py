@@ -12,6 +12,7 @@ api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['ACCESS_TOKEN'],
                  secrets.TWITTER_CODES['ACCESS_SECRET'])
 
+# TODO more relevant tweets
 def search(query):
     r = api.request('search/tweets', {'q': query, 'lang': 'en'})
     tweets = []

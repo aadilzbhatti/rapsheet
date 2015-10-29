@@ -9,10 +9,12 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-    <nav class="nav nav-pills nav-justified">
-        <li><a href="{% url 'raptweets:index' %}">Search</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="{% url 'raptweets:graph' album.id %}">Graph for this album</a></li>
+    <nav>
+        <ul class="nav nav-pills nav-justified">
+            <li><a href="{% url 'raptweets:index' %}">Search</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="{% url 'raptweets:graph' album.id %}">Graph for this album</a></li>
+        </ul>
     </nav>
     <h1>Tweets for {{ album.artist }} - {{ album.title }}</h1>
     <div class="tweets">
@@ -24,20 +26,18 @@
         </div>
     {% endfor %}
     </div>
-    <div class="pagination">
-        <span class="step-links">
-            <ul class="pager">
-                {% if tweets.has_previous %}
-                    <a href="?page={{ tweets.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="current">
-                    Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}
-                </span>
-                {% if tweets.has_next %}
-                    <a href="?page={{ tweets.next_page_number }}">next</a>
-                {% endif %}
-            </ul>
-        </span>
+    <div class="page">
+        <ul class="pagination">
+            {% if tweets.has_previous %}
+                <li><a href="{{ tweets.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% for num in pages %}
+                <li><a href="?page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+            {% if tweets.has_next %}
+                <li><a href="?page={{ tweets.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
     </div>
 </body>
 </html>
