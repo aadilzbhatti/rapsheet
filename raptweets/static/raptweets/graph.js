@@ -65,6 +65,16 @@ $(document).ready(function() {
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom);
 
+    // the pop up for each data point
+    var tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-10, 0])
+        .html(function(d) {
+            return "<strong>Sentiment:</strong> <span style='color: red'>" + d[1] + "</span>";
+        });
+
+    svg.call(tip);
+
     // add data points
     svg.selectAll("circle")
         .data(datamap)
@@ -76,36 +86,9 @@ $(document).ready(function() {
         .attr("cy", function(d) {
             return yScale(d[1]);
         })
-        .attr("r", r);
-
-    svg.selectAll("text")
-        .data(datamap)
-        .enter()
-        .append("text")
-        .text(function(d) {
-            return d[1] + "";
-        })
-        .attr("x", function(d) {
-            return xScale(d[0]) + 50;
-        })
-        .attr("y", function(d) {
-            return yScale(d[1]);
-        })
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11px")
-        .attr("fill", "red")
-        .on("mouseover", function() {
-            var text = d3.select(this);
-            text.transition()
-                .duration(200)
-                .attr("font-size", "22px");
-        })
-        .on("mouseout", function() {
-            var text = d3.select(this)
-            text.transition()
-                .duration(200)
-                .attr("font-size", "11px");
-        });
+        .attr("r", r)
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide);
 
     // add lines
     var line = d3.svg.line()
