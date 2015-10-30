@@ -1,6 +1,7 @@
 from TwitterAPI import TwitterAPI
 import spotipy
 from collections import OrderedDict
+import dateutil.parser as parser
 
 from . alchemyapi import AlchemyAPI
 from . import secrets
@@ -53,7 +54,6 @@ def sentiment(tweet):
     return float(response['docSentiment']['score'])
 
 def format_date(date):
-    import dateutil.parser as parser
     date = parser.parse(date)
     return date.isoformat()
 
