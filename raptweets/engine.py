@@ -1,5 +1,6 @@
 from TwitterAPI import TwitterAPI
 import spotipy
+from collections import OrderedDict
 
 from . alchemyapi import AlchemyAPI
 from . import secrets
@@ -58,7 +59,7 @@ def easy_date(date):
     return ' '.join(date.ctime().split()[0:3])
 
 def average_sentiment_per_day(tweets):
-    sentiments = {}
+    sentiments = OrderedDict({})
     vals = {}
     for tweet in tweets:
         date = easy_date(tweet.pub_date)
@@ -96,6 +97,7 @@ def search_and_add_tweets(album):
             Tweet.objects.get(text=t.text)
         except(KeyError, Tweet.DoesNotExist):
             t.save()
+    return Tweet.objects.filter(album=album)
 
 def format_title(title):
     low = title.split()

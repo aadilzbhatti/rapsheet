@@ -7,6 +7,8 @@ import json
 from .models import Tweet, Album
 from . import engine
 
+cached_tweets = []
+
 def index(request):
     return render_to_response('raptweets/index.html')
 
@@ -19,14 +21,13 @@ def search(request):
             if s[0].lower() in titles:
                 title = titles[s[0].lower()].title
                 album = get_object_or_404(Album, title=title)
-                return graph(request, album.id)
             else:
                 album = Album(title=s[0],
                               artist=s[1],
                               release_date=timezone.now(),
                               sales=0)
                 album.save()
-                return graph(request, album.id)
+            return graph(request, album.id)
     return HttpResponse('404')
 
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
@@ -34,7 +35,7 @@ def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
     engine.search_and_add_tweets(album)
     tweet_list = Tweet.objects.filter(album=album).order_by('-pub_date')
-    avg = engine.average_sentiment_per_day(tweet_list)  # Query
+    avg = engine.average_sentiment_per_day(tweet_list)
     paginator = Paginator(tweet_list, 10)
 
     page = request.GET.get('page')
@@ -54,20 +55,15 @@ def tweets(request, album_id=0):
         }
     )
 
-
-
 # TODO if tweets already loaded, do not make another query (i.e. coming from tweet view)
 def graph(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)
-    tw = Tweet.objects.filter(album=album)
-    if not tw:
-        engine.search_and_add_tweets(album)
-    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album))  # Query
+    engine.search_and_add_tweets(album)
+    avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album)
+                                                        .order_by('pub_date'))  # Query
     for key in avg:
         avg[key] = "%.2f" % avg[key]
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
     })
-
-

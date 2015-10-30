@@ -5,7 +5,7 @@
 $(document).ready(function() {
     var $avg = $('#avg');
     var data = JSON.parse($avg.text());
-    $avg.empty();
+    //$avg.empty();
 
     var datamap = [];
     var dates = [];
@@ -27,13 +27,15 @@ $(document).ready(function() {
         datamap.push([date, data[item]]);
     }
 
+    console.log(datamap);
+
     var margin = {top: 100, right: 40, bottom: 100, left: 50};
     var r = 5;
 
     var w = 900 - margin.left - margin.right;
     var h = 600 - margin.top - margin.bottom;
 
-    var max_date = new Date();
+    var max_date = Math.max.apply(null, dates);
     var min_date = Math.min.apply(null, dates);
 
     // x-scale
@@ -45,7 +47,7 @@ $(document).ready(function() {
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(Math.max(datamap.length, 1))
+        .ticks(datamap.length)
         .tickPadding(10)
         .tickFormat(function(d) {
             return d.toISOString().slice(0, 10);
@@ -60,7 +62,7 @@ $(document).ready(function() {
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient("left")
-        .ticks(Math.max(datamap.length, 1));
+        .ticks(datamap.length);
 
     // create svg
     var svg = d3.select(".graph")
@@ -117,11 +119,15 @@ $(document).ready(function() {
         })
         .y(function(d) {
             return yScale(d[1]);
-        });
+        })
+        .interpolate("linear");
 
+    // the line
     svg.append("path")
         .attr("class", "line")
-        .attr("d", line(datamap));
+        .attr("d", line(datamap))
+        .attr("transform", "translate(0, 0)")
+        .attr("stroke-width","4");
 
     // add x-axis
     svg.append("g")
@@ -156,7 +162,4 @@ $(document).ready(function() {
         .attr("y", h)
         .style("font-family", "Source Sans Pro")
         .text("Sentiment");
-
-    console.log(h/2);
-    console.log(20);
 });
