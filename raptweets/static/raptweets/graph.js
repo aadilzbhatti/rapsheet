@@ -5,7 +5,7 @@
 $(document).ready(function() {
     var $avg = $('#avg');
     var data = JSON.parse($avg.text());
-    //$avg.empty();
+    $avg.empty();
 
     var datamap = [];
     var dates = [];
@@ -18,16 +18,11 @@ $(document).ready(function() {
         keys.push(key);
     }
 
-    dates.sort();
-    keys.sort();
-
     for (var key in dates) {
         var date = dates[key];
         var item = keys[key];
         datamap.push([date, data[item]]);
     }
-
-    console.log(datamap);
 
     var margin = {top: 100, right: 40, bottom: 100, left: 50};
     var r = 5;
@@ -41,7 +36,7 @@ $(document).ready(function() {
     // x-scale
     var xScale = d3.time.scale()
         .domain([min_date, max_date])
-        .range([0, w - 20 * datamap.length]);
+        .range([0, w - 20]);
 
     //x-axis
     var xAxis = d3.svg.axis()
@@ -125,9 +120,9 @@ $(document).ready(function() {
     // the line
     svg.append("path")
         .attr("class", "line")
-        .attr("d", line(datamap))
-        .attr("transform", "translate(0, 0)")
-        .attr("stroke-width","4");
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("d", line(datamap));
 
     // add x-axis
     svg.append("g")

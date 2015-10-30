@@ -50,7 +50,6 @@ def tweets(request, album_id=0):
         {
             'tweets': t,
             'album': album,
-            'avg': avg,
             'pages': [num for num in range(1, t.paginator.num_pages)]
         }
     )
