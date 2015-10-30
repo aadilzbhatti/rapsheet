@@ -23,4 +23,7 @@ class Tweet(models.Model):
         self.sentiment = sentiment
         self.pub_date = pub_date
 
+# TODO more relevant tweets
+# TODO styling
+# TODO sqlite3 --> postgres
 # TODO add artists, songs as well

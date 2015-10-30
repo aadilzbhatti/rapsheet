@@ -77,6 +77,7 @@ $(document).ready(function() {
 
     // add data points
     svg.selectAll("circle")
+        .attr("class", "point")
         .data(datamap)
         .enter()
         .append("circle")
@@ -90,7 +91,7 @@ $(document).ready(function() {
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide);
 
-    // add lines
+    // add line data
     var line = d3.svg.line()
         .x(function(d) {
             return xScale(d[0]) + 50;
@@ -103,8 +104,6 @@ $(document).ready(function() {
     // the line
     svg.append("path")
         .attr("class", "line")
-        .attr("fill", "none")
-        .attr("stroke", "black")
         .attr("d", line(datamap));
 
     // add x-axis
