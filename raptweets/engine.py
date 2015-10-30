@@ -7,6 +7,8 @@ from . import secrets
 
 from .models import Tweet, Album
 
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 
 api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
                  secrets.TWITTER_CODES['CONSUMER_SECRET'],
