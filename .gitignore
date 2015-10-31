@@ -1,5 +1,4 @@
-#secrets.py
-#api_key.txt
+local.py
 *.pyc
 *.xml
 *.iml
