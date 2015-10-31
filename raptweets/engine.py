@@ -2,21 +2,30 @@ from TwitterAPI import TwitterAPI
 import spotipy
 from collections import OrderedDict
 import dateutil.parser as parser
+import os
 
 from . alchemyapi import AlchemyAPI
-from . import secrets
-
 from .models import Tweet, Album
-
-import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 
-api = TwitterAPI(secrets.TWITTER_CODES['CONSUMER_KEY'],
-                 secrets.TWITTER_CODES['CONSUMER_SECRET'],
-                 secrets.TWITTER_CODES['ACCESS_TOKEN'],
-                 secrets.TWITTER_CODES['ACCESS_SECRET'])
+try:                                            # development settings
+    from . import secrets
+    twitter_keys = secrets.TWITTER_CODES
+    alchemy_key = secrets.ALCHEMY_CODES[0]
+except SystemError:                             # production settings
+    twitter_keys = {
+        'CONSUMER_KEY': os.environ['CONSUMER_KEY'],
+        'CONSUMER_SECRET': os.environ['CONSUMER_SECRET'],
+        'ACCESS_TOKEN': os.environ['ACCESS_TOKEN'],
+        'ACCESS_SECRET': os.environ['ACCESS_SECRET']
+    }
+    alchemy_key = os.environ['ALCHEMY_KEY']
 
-# TODO more relevant tweets
+api = TwitterAPI(twitter_keys['CONSUMER_KEY'],
+                 twitter_keys['CONSUMER_SECRET'],
+                 twitter_keys['ACCESS_TOKEN'],
+                 twitter_keys['ACCESS_SECRET'])
+
 def search(query):
     r = api.request('search/tweets', {'q': query, 'lang': 'en'})
     tweets = []
@@ -45,7 +54,7 @@ def get_sentiment(tweets):
 
 def sentiment(tweet):
     alchemyapi = AlchemyAPI()
-    alchemyapi.apikey = secrets.ALCHEMY_CODES[0]
+    alchemyapi.apikey = alchemy_key
     response = alchemyapi.sentiment('text', tweet)
     if response['status'] == 'ERROR':
         return 0
@@ -75,7 +84,6 @@ def average_sentiment_per_day(tweets):
         sentiments[key] /= vals[key]
     return sentiments
 
-# TODO more intelligent spotify queries -- perhaps add more search fields *shudder*
 def spotify_search(query):
     sp = spotipy.Spotify()
     result = sp.search(q=query, limit=1)
