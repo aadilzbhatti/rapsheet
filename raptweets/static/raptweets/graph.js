@@ -119,24 +119,16 @@ $(document).ready(function() {
         .attr("x", w/2)
         .attr("y", h + 50)
         .style("text-anchor", "middle")
-        .style("font-family", "Source Sans Pro")
+        .style("font-family", "sans-serif")
         .text("Date");
 
     // add y-axis
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(50, 0)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
         .style("font-family", "Source Sans Pro")
+        .text("Sentiment")
         .call(yAxis);
-
-    // add text to y-axis
-    svg.append("text")
-        .attr("class", "y-label")
-        .attr("text-anchor", "middle")
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .attr("x", w * 2)
-        .attr("y", h)
-        .style("font-family", "Source Sans Pro")
-        .text("Sentiment");
 });
