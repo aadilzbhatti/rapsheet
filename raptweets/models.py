@@ -27,3 +27,4 @@ class Tweet(models.Model):
 # TODO styling
 # TODO add artists, songs as well
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
+# TODO secrets and such
