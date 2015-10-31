@@ -42,8 +42,7 @@ and run
     
 This will install the dependencies used by the app if you do not already have them. 
     
-You will also need the d3.js and jquery.js files. Once you have downloaded these, place them in the 
-`raptweets/static/raptweets folder`. You will then need an AlchemyAPI key as well as TwitterAPI keys, 
+You will then need an AlchemyAPI key as well as TwitterAPI keys, 
 which you should place in a file called `secrets.py`, in the main `raptweets` directory. You can create
 this file with `touch secrets.py`. You can get the Alchemy and Twitter API keys from 
 [here](http://www.alchemyapi.com/api/register.html) and [here](https://apps.twitter.com/app/new), respectively. 
