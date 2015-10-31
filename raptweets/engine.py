@@ -41,14 +41,6 @@ Constructing Alchemy API object with given keys
 alchemyapi = AlchemyAPI()
 
 """
-List of concepts for which to determine if a tweet is
-relevant or not
-"""
-global concepts
-concepts = []
-
-
-"""
 Searches for tweets based on given query
 """
 def search(query):
@@ -93,23 +85,6 @@ def sentiment(tweet):
     if response['docSentiment']['type'] == 'neutral':
         return 0
     return float(response['docSentiment']['score'])
-
-
-"""
-Determines if a tweet is relevant based on stored concepts.
-"""
-def relevant_tweet(tweet):
-    for x in concepts:
-        if x.lower() in tweet.lower():
-            return True
-    return False
-
-"""
-Constructs concept list
-"""
-def get_concepts(tweets):
-    string = ' '.join(tweets)
-
 
 def format_date(date):
     date = parser.parse(date)
