@@ -30,7 +30,6 @@ def search(request):
             return graph(request, album.id)
     return HttpResponse('404')
 
-# TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
 def tweets(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)  # Query
     engine.search_and_add_tweets(album)
@@ -54,7 +53,6 @@ def tweets(request, album_id=0):
         }
     )
 
-# TODO if tweets already loaded, do not make another query (i.e. coming from tweet view)
 def graph(request, album_id=0):
     album = get_object_or_404(Album, pk=album_id)
     engine.search_and_add_tweets(album)

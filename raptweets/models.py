@@ -25,5 +25,5 @@ class Tweet(models.Model):
 
 # TODO more relevant tweets
 # TODO styling
-# TODO sqlite3 --> postgres
 # TODO add artists, songs as well
+# TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
