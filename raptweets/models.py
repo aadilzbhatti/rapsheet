@@ -26,5 +26,5 @@ class Tweet(models.Model):
 # TODO more relevant tweets
 # TODO styling
 # TODO add artists, songs as well
+# TODO more intelligent Spotify queries
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)
-# TODO secrets and such

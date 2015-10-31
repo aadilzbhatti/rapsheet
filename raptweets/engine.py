@@ -8,6 +8,11 @@ from . alchemyapi import AlchemyAPI
 from .models import Tweet, Album
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 
+
+"""
+If in development, will load from local secrets.py file.
+Otherwise will load from config variables.
+"""
 try:                                            # development settings
     from . import secrets
     twitter_keys = secrets.TWITTER_CODES
@@ -21,11 +26,31 @@ except SystemError:                             # production settings
     }
     alchemy_key = os.environ['ALCHEMY_KEY']
 
+
+"""
+Constructing Twitter API object with given keys
+"""
 api = TwitterAPI(twitter_keys['CONSUMER_KEY'],
                  twitter_keys['CONSUMER_SECRET'],
                  twitter_keys['ACCESS_TOKEN'],
                  twitter_keys['ACCESS_SECRET'])
 
+"""
+Constructing Alchemy API object with given keys
+"""
+alchemyapi = AlchemyAPI()
+
+"""
+List of concepts for which to determine if a tweet is
+relevant or not
+"""
+global concepts
+concepts = []
+
+
+"""
+Searches for tweets based on given query
+"""
 def search(query):
     r = api.request('search/tweets', {'q': query, 'lang': 'en'})
     tweets = []
@@ -40,6 +65,10 @@ def search(query):
             text.append(tweet['text'])
     return tweets
 
+
+"""
+Takes given tweets and finds their sentiment value
+"""
 def get_sentiment(tweets):
     sentiment_tweets = []
     for tweet in tweets:
@@ -52,8 +81,11 @@ def get_sentiment(tweets):
     return sentiment_tweets
 
 
+"""
+Determines the sentiment value for a tweet string
+http://www.alchemyapi.com/api/keyword/textc.html
+"""
 def sentiment(tweet):
-    alchemyapi = AlchemyAPI()
     alchemyapi.apikey = alchemy_key
     response = alchemyapi.sentiment('text', tweet)
     if response['status'] == 'ERROR':
@@ -61,6 +93,23 @@ def sentiment(tweet):
     if response['docSentiment']['type'] == 'neutral':
         return 0
     return float(response['docSentiment']['score'])
+
+
+"""
+Determines if a tweet is relevant based on stored concepts.
+"""
+def relevant_tweet(tweet):
+    for x in concepts:
+        if x.lower() in tweet.lower():
+            return True
+    return False
+
+"""
+Constructs concept list
+"""
+def get_concepts(tweets):
+    string = ' '.join(tweets)
+
 
 def format_date(date):
     date = parser.parse(date)
