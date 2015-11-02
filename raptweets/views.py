@@ -13,7 +13,7 @@ def index(request):
     return render_to_response('raptweets/index.html')
 
 def search(request):
-    query = request.GET.get('album_title')
+    query = request.GET.get('q')
     if query:
         titles = engine.close_titles()
         s = engine.spotify_search(query)
