@@ -140,7 +140,7 @@ def format_title(title):
         'Version)',
         '(Deluxe',
         'Explicit',
-        'Eeluxe)',
+        'Deluxe)',
         'Deluxe',
         '[Deluxe',
         'Edition(Explicit)]',
@@ -152,7 +152,8 @@ def format_title(title):
         '(2002',
         '(2011',
         '-',
-        '(Legacy'
+        '(Legacy',
+        'Edition)'
     ]
     for word in fluff:
         if word in low:
