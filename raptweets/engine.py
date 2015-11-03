@@ -17,7 +17,7 @@ try:                                            # development settings
     from . import secrets
     twitter_keys = secrets.TWITTER_CODES
     alchemy_key = secrets.ALCHEMY_CODES[0]
-except SystemError:                             # production settings
+except SystemError, ImportError:                             # production settings
     twitter_keys = {
         'CONSUMER_KEY': os.environ['CONSUMER_KEY'],
         'CONSUMER_SECRET': os.environ['CONSUMER_SECRET'],
