@@ -2,5 +2,4 @@ secrets.py
 local.py
 api_key.txt
 *.pyc
-*.xml
-*.iml
+.idea
