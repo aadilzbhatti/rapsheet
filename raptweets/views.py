@@ -63,3 +63,5 @@ def graph(request, album_id=0):
         'album': album,
         'avg': json.dumps(avg)
     })
+
+
