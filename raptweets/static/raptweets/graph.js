@@ -5,7 +5,7 @@
 $(document).ready(function() {
     var $avg = $('#avg');
     var data = JSON.parse($avg.text());
-    $avg.empty();
+    //$avg.empty();
 
     var datamap = [];
     var dates = [];

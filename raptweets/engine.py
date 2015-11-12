@@ -123,14 +123,10 @@ def spotify_search(query):
 def search_and_add_tweets(album):
     query = get_sentiment(search(album.title))
     for tweet in query:
-        t = Tweet(text=tweet['text'],
-                  sentiment=tweet['sentiment'],
-                  pub_date=tweet['date'],
-                  album=album)
-        try:
-            Tweet.objects.get(text=t.text)
-        except(KeyError, Tweet.DoesNotExist):
-            t.save()
+        Tweet.objects.get_or_create(text=tweet['text'],
+                                    sentiment=tweet['sentiment'],
+                                    pub_date=tweet['date'],
+                                    album=album)
     return Tweet.objects.filter(album=album)
 
 def format_title(title):
