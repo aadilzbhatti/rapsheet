@@ -38,12 +38,15 @@ $(document).ready(function() {
         .domain([min_date, max_date])
         .range([0, w - 20]);
 
+    var numTicks = Math.ceil(datamap.length * 0.8);
+
+    console.log(numTicks);
+
     //x-axis
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(datamap.length)
-        .tickPadding(10)
+        .tickPadding(15)
         .tickFormat(function(d) {
             return d.toISOString().slice(0, 10);
         });
@@ -70,7 +73,10 @@ $(document).ready(function() {
         .attr("class", "d3-tip")
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>Sentiment:</strong> <span style='color: red'>" + d[1] + "</span>";
+            return "<strong>Sentiment:</strong> <span style='color: red'>" + d[1] + "</span>"
+                    + "<br><strong>Date:</strong> <span style='color: red'>"
+                    + d[0].toString().substring(0, 10)
+                    + "</span>";
         });
 
     svg.call(tip);
@@ -111,13 +117,18 @@ $(document).ready(function() {
         .attr("class", "axis")
         .attr("transform", "translate(50," + h + ")")
         .style("font-family", "Source Sans Pro")
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.8em")
+        .attr("dy", "-1.4em")
+        .attr("transform", "rotate(-65)");
 
     // add text to x-axis
     svg.append("text")
         .attr("class", "x-label")
         .attr("x", w/2)
-        .attr("y", h + 50)
+        .attr("y", h + 100)
         .style("text-anchor", "middle")
         .style("font-family", "sans-serif")
         .text("Date");
