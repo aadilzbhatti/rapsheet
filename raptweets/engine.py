@@ -120,7 +120,7 @@ def spotify_search(query):
         popularity = album['popularity']
         return name, artist, release_date, popularity
     except KeyError:
-        return None 
+        return None
 
 def search_and_add_tweets(album):
     query = get_sentiment(search(album.title))
