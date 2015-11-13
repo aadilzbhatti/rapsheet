@@ -24,8 +24,8 @@ def search(request):
             else:
                 album = Album(title=s[0],
                               artist=s[1],
-                              release_date=timezone.now(),
-                              sales=0)
+                              release_date=s[2],
+                              sales=s[3])
                 album.save()
             return graph(request, album.id)
     return HttpResponse('404')

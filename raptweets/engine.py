@@ -110,15 +110,17 @@ def average_sentiment_per_day(tweets):
 
 def spotify_search(query):
     sp = spotipy.Spotify()
-    result = sp.search(q=query, limit=1)
-    if not result['tracks']['items']:
-        return None
+    result = sp.search(query)
     try:
-        title = format_title(result['tracks']['items'][0]['album']['name'])
-        artist = result['tracks']['items'][0]['artists'][0]['name']  # get first listed artist
-        return title, artist
+        uri = result['tracks']['items'][0]['album']['id']
+        album = sp.album(uri)
+        name = format_title(album['name'])
+        artist = album['artists'][0]['name']
+        release_date = album['release_date']
+        popularity = album['popularity']
+        return name, artist, release_date, popularity
     except KeyError:
-        return None
+        return None 
 
 def search_and_add_tweets(album):
     query = get_sentiment(search(album.title))
