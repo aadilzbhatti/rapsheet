@@ -3,3 +3,4 @@ local.py
 api_key.txt
 *.pyc
 .idea
+.DS_Store

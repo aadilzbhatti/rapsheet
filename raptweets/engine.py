@@ -164,3 +164,5 @@ def close_titles():
     for i in range(len(a)):
         titles[a[i].title.lower()] = a[i]
     return titles
+
+# def constantly_hating_on_you():
