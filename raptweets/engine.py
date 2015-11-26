@@ -3,6 +3,7 @@ import spotipy
 from collections import OrderedDict
 import dateutil.parser as parser
 import os
+from textblob import TextBlob
 
 from . alchemyapi import AlchemyAPI
 from .models import Tweet, Album
@@ -78,13 +79,15 @@ Determines the sentiment value for a tweet string
 http://www.alchemyapi.com/api/keyword/textc.html
 """
 def sentiment(tweet):
-    alchemyapi.apikey = alchemy_key
-    response = alchemyapi.sentiment('text', tweet)
-    if response['status'] == 'ERROR':
-        return 0
-    if response['docSentiment']['type'] == 'neutral':
-        return 0
-    return float(response['docSentiment']['score'])
+    # alchemyapi.apikey = alchemy_key
+    # response = alchemyapi.sentiment('text', tweet)
+    # if response['status'] == 'ERROR':
+    #     return 0
+    # if response['docSentiment']['type'] == 'neutral':
+    #     return 0
+    # return float(response['docSentiment']['score'])
+    blob = TextBlob(tweet)
+    return blob.sentiment.polarity
 
 def format_date(date):
     date = parser.parse(date)
