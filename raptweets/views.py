@@ -14,18 +14,18 @@ def index(request):
 def search(request):
     query = request.GET.get('q')
     if query:
-        print(query)
         titles = engine.close_titles()      # cache this
         s = engine.spotify_search(query)
         if s:
             if titles:
+                print(s)
                 if s[0].lower() in titles:
                     title = titles[s[0].lower()].title
                     album = get_object_or_404(Album, title=title)
                     return graph(request, album.id)
             album = Album(title=s[0],               # get or create
                           artist=s[1],
-                          release_date=s[2],
+                          release_date=engine.format_date(s[2]),
                           sales=s[3])
             album.save()
             return graph(request, album.id)
@@ -62,7 +62,9 @@ def graph(request, album_id=0):
     })
 
 def background(request):
-    for album in Album.objects.all():
-        engine.search_and_add_tweets(album)
-        print(album.title)
-    print(Tweet.objects.count())
+    while True:
+        for album in Album.objects.all():
+            engine.search_and_add_tweets(album)
+            print(album.title)
+        print(Tweet.objects.count())
+    return graph(request, 1)
