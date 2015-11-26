@@ -141,7 +141,9 @@ def format_title(title):
         'Edition)',
         '(UK',
         '(Softpak)',
-        '(Explicit)'
+        '(Explicit)',
+        'Edition',
+        '(Explicit)]'
     ]
     for word in fluff:
         if word in low:
@@ -172,9 +174,6 @@ def get_artist_tweets(artist):
             tweets = tweets | album.tweet_set.all()
     return tweets
 
-def get_album_image(album_list):
-    items = OrderedDict({})
-    for album in album_list:
-        sp = spotify_search(album.title)
-        items[album] = sp[4]
-    return items
+def get_album_image(album):
+    sp = spotify_search(album)
+    return sp[4]

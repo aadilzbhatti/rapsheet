@@ -11,7 +11,7 @@ class Album(models.Model):
     artist = models.ForeignKey(Artist)
     release_date = models.DateTimeField()
     popularity = models.IntegerField(default=0)
-    image_url = models.CharField
+    image_url = models.CharField(max_length=500, default='')
 
     def __str__(self):
         return self.artist.name + ' - ' + self.title

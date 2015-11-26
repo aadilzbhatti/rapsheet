@@ -27,7 +27,8 @@ def search(request):
             album = Album(title=s[0],                                   # get or create
                           artist=Artist.objects.get_or_create(name=s[1])[0],
                           release_date=engine.format_date(s[2]),
-                          popularity=s[3])
+                          popularity=s[3],
+                          image_url=s[4])
             album.save()
             return graph(request, album.id)
     return HttpResponse('404')
