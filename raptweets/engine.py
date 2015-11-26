@@ -23,7 +23,6 @@ except ImportError:                             # production settings
         'ACCESS_SECRET': os.environ['ACCESS_SECRET']
     }
 
-
 """
 Constructing Twitter API object with given keys
 """
