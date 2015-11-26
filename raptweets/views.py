@@ -14,17 +14,22 @@ def index(request):
 def search(request):
     query = request.GET.get('q')
     if query:
+        print(query)
         titles = engine.close_titles()      # cache this
         s = engine.spotify_search(query)
+        print(s)
         if s:
-            if s[0].lower() in titles:
-                title = titles[s[0].lower()].title
-                album = get_object_or_404(Album, title=title)
+            print(titles)
+            if titles:
+                if s[0].lower() in titles:
+                    title = titles[s[0].lower()].title
+                    album = get_object_or_404(Album, title=title)
             else:
                 album = Album(title=s[0],               # get or create
                               artist=s[1],
                               release_date=s[2],
                               sales=s[3])
+                album.save()
             return graph(request, album.id)
     return HttpResponse('404')
 
