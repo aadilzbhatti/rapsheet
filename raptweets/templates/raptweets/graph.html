@@ -20,7 +20,7 @@
             <li><a href="{% url 'raptweets:tweets' album.id %}">Tweets for this album</a></li>
         </ul>
     </nav>
-    <h1>Graph for {{ album.title }} - {{ album.artist.name }}</h1>
+    <h1>Graph for {{ album.title }} - <a href="{% url 'raptweets:artist_albums' album.artist_id %}">{{ album.artist.name }}</a></h1>
     <div id="avg">
         {{ avg }}
     </div>

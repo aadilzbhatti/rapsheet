@@ -11,6 +11,7 @@ class Album(models.Model):
     artist = models.ForeignKey(Artist)
     release_date = models.DateTimeField()
     popularity = models.IntegerField(default=0)
+    image_url = models.CharField
 
     def __str__(self):
         return self.artist.name + ' - ' + self.title
@@ -32,6 +33,4 @@ class Tweet(models.Model):
 
 # TODO more relevant tweets
 # TODO styling
-# TODO add artists, songs as well
-# TODO more intelligent Spotify queries
 # TODO if tweets already loaded, do not make another query (i.e. coming from graph view)

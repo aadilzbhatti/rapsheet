@@ -104,7 +104,8 @@ def spotify_search(query):
         artist = album['artists'][0]['name']
         release_date = album['release_date']
         popularity = album['popularity']
-        return name, artist, release_date, popularity
+        image = album['images'][1]['url']
+        return name, artist, release_date, popularity, image
     except KeyError:
         return None
 
@@ -137,7 +138,10 @@ def format_title(title):
         '(2011',
         '-',
         '(Legacy',
-        'Edition)'
+        'Edition)',
+        '(UK',
+        '(Softpak)',
+        '(Explicit)'
     ]
     for word in fluff:
         if word in low:
@@ -167,3 +171,10 @@ def get_artist_tweets(artist):
         else:
             tweets = tweets | album.tweet_set.all()
     return tweets
+
+def get_album_image(album_list):
+    items = OrderedDict({})
+    for album in album_list:
+        sp = spotify_search(album.title)
+        items[album] = sp[4]
+    return items

@@ -20,7 +20,6 @@ def search(request):
         s = engine.spotify_search(query)
         if s:
             if titles:
-                print(s)
                 if s[0].lower() in titles:
                     title = titles[s[0].lower()].title
                     album = get_object_or_404(Album, title=title)
@@ -58,6 +57,7 @@ def graph(request, album_id):
     engine.search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album)
                                                         .order_by('pub_date'))  # Query
+    print(avg)
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
@@ -86,11 +86,17 @@ def artist_tweets(request, artist_id):
 
 def artist_albums(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
-    album_list = artist.album_set.all()
+    album_list = artist.album_set.all().order_by('release_date')
+    items = engine.get_album_image(album_list)
     return render(request, 'raptweets/artist_albums.html', {
         'artist': artist,
-        'albums': album_list
+        'albums': album_list,
+        'images': items
     })
+
+"""
+To run in the background and gather tweets
+"""
 
 def background(request):
     while True:
