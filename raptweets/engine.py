@@ -109,6 +109,7 @@ def average_sentiment_per_day(tweets):
             vals[date] += 1
     for key in sentiments:
         sentiments[key] /= vals[key]
+        sentiments[key] = '%.2f' % sentiments[key]
     return sentiments
 
 def spotify_search(query):

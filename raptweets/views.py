@@ -53,8 +53,6 @@ def graph(request, album_id=0):
     engine.search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album)
                                                         .order_by('pub_date'))  # Query
-    for key in avg:
-        avg[key] = "%.2f" % avg[key]
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
