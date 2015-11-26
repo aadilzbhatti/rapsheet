@@ -5,10 +5,8 @@ import dateutil.parser as parser
 import os
 from textblob import TextBlob
 
-from . alchemyapi import AlchemyAPI
 from .models import Tweet, Album
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
-
 
 """
 If in development, will load from local secrets.py file.
@@ -17,7 +15,6 @@ Otherwise will load from config variables.
 try:                                            # development settings
     from . import secrets
     twitter_keys = secrets.TWITTER_CODES
-    alchemy_key = secrets.ALCHEMY_CODES[0]
 except ImportError:                             # production settings
     twitter_keys = {
         'CONSUMER_KEY': os.environ['CONSUMER_KEY'],
@@ -25,7 +22,6 @@ except ImportError:                             # production settings
         'ACCESS_TOKEN': os.environ['ACCESS_TOKEN'],
         'ACCESS_SECRET': os.environ['ACCESS_SECRET']
     }
-    alchemy_key = os.environ['ALCHEMY_KEY']
 
 
 """
@@ -35,11 +31,6 @@ api = TwitterAPI(twitter_keys['CONSUMER_KEY'],
                  twitter_keys['CONSUMER_SECRET'],
                  twitter_keys['ACCESS_TOKEN'],
                  twitter_keys['ACCESS_SECRET'])
-
-"""
-Constructing Alchemy API object with given keys
-"""
-alchemyapi = AlchemyAPI()
 
 """
 Searches for tweets based on given query
@@ -76,16 +67,8 @@ def get_sentiment(tweets):
 
 """
 Determines the sentiment value for a tweet string
-http://www.alchemyapi.com/api/keyword/textc.html
 """
 def sentiment(tweet):
-    # alchemyapi.apikey = alchemy_key
-    # response = alchemyapi.sentiment('text', tweet)
-    # if response['status'] == 'ERROR':
-    #     return 0
-    # if response['docSentiment']['type'] == 'neutral':
-    #     return 0
-    # return float(response['docSentiment']['score'])
     blob = TextBlob(tweet)
     return blob.sentiment.polarity
 
@@ -168,5 +151,3 @@ def close_titles():
     for i in range(len(a)):
         titles[a[i].title.lower()] = a[i]
     return titles
-
-# def constantly_hating_on_you():
