@@ -9,9 +9,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
 </head>
 <body>
-    <nav class="nav nav-pills nav-justified">
-        <li><a href="{% url 'raptweets:index' %}">Home</a></li>
-        <li><a href="#">About</a></li>
+    <nav>
+        <ul class="nav nav-pills">
+            <li><a href="{% url 'raptweets:index' %}">Home</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
     </nav>
     <h1>RapTweets</h1>
     <h2>Search for an album to see its graph</h2>
