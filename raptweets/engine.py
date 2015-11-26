@@ -5,7 +5,7 @@ import dateutil.parser as parser
 import os
 from textblob import TextBlob
 
-from .models import Tweet, Album
+from .models import *
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 
 """
@@ -150,3 +150,20 @@ def close_titles():
     for i in range(len(a)):
         titles[a[i].title.lower()] = a[i]
     return titles
+
+def total_tweets_per_artist():
+    total = {}
+    for artist in Artist.objects.all():
+        total[artist.name] = 0
+        for album in artist.album_set.all():
+            total[artist.name] += album.tweet_set.count()
+    return total
+
+def get_artist_tweets(artist):
+    tweets = None
+    for album in artist.album_set.all():
+        if not tweets:
+            tweets = album.tweet_set.all()
+        else:
+            tweets = tweets | album.tweet_set.all()
+    return tweets

@@ -4,7 +4,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Tweets</title>
+    <title>Tweets for {{ artist.name }}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
@@ -13,11 +13,10 @@
         <ul class="nav nav-pills ">
             <li><a href="{% url 'raptweets:index' %}">Home</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="{% url 'raptweets:graph' album.id %}">Graph for this album</a></li>
         </ul>
     </nav>
     <br/><br/>
-    <h1>Tweets for {{ album.artist.name }} - {{ album.title }}</h1>
+    <h1>Tweets for {{ artist.name }} </h1>
     <div class="tweets">
     {% for tweet in tweets %}
         <div id="tweet">

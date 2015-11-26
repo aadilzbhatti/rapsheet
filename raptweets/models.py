@@ -1,13 +1,19 @@
 from django.db import models
 
-class Album(models.Model):
-    title = models.CharField(max_length=100)
-    artist = models.CharField(max_length=100)
-    release_date = models.DateTimeField()
-    sales = models.IntegerField(default=0)
+class Artist(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.artist + ' - ' + self.title
+        return self.name
+
+class Album(models.Model):
+    title = models.CharField(max_length=100)
+    artist = models.ForeignKey(Artist)
+    release_date = models.DateTimeField()
+    popularity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.artist.name + ' - ' + self.title
 
 class Tweet(models.Model):
     text = models.CharField(max_length=140)
@@ -22,6 +28,7 @@ class Tweet(models.Model):
         self.text = text
         self.sentiment = sentiment
         self.pub_date = pub_date
+
 
 # TODO more relevant tweets
 # TODO styling

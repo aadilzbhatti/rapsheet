@@ -15,12 +15,12 @@
 <body>
     <nav>
         <ul class="nav nav-pills">
-            <li><a href="{% url 'raptweets:index' %}">Search</a></li>
+            <li><a href="{% url 'raptweets:index' %}">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="{% url 'raptweets:tweets' album.id %}">Tweets for this album</a></li>
         </ul>
     </nav>
-    <h1>Graph for {{ album.title }} - {{ album.artist }}</h1>
+    <h1>Graph for {{ album.title }} - {{ album.artist.name }}</h1>
     <div id="avg">
         {{ avg }}
     </div>
