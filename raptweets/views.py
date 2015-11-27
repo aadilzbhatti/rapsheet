@@ -94,11 +94,9 @@ def artist_tweets(request, artist_id):
 def artist_albums(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
     album_list = artist.album_set.all().order_by('release_date')
-    items = engine.get_album_image(album_list)
     return render(request, 'raptweets/artist_albums.html', {
         'artist': artist,
         'albums': album_list,
-        'images': items
     })
 
 """
