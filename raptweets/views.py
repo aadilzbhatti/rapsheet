@@ -16,6 +16,13 @@ Views for albums
 def search(request):
     query = request.GET.get('q')
     if query:
+        # results = engine.get_results(query)
+        # return render_to_response (
+        #     'raptweets/results.html',
+        #     {
+        #         'results': results
+        #     }
+        # )
         titles = engine.close_titles()                                  # cache this
         s = engine.spotify_search(query)
         if s:
@@ -58,7 +65,6 @@ def graph(request, album_id):
     engine.search_and_add_tweets(album)
     avg = engine.average_sentiment_per_day(Tweet.objects.filter(album=album)
                                                         .order_by('pub_date'))  # Query
-    print(avg)
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)

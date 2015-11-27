@@ -109,6 +109,27 @@ def spotify_search(query):
     except KeyError:
         return None
 
+def get_results(query):
+    final = []
+    sp = spotipy.Spotify()
+    results = sp.search(query)
+    try:
+        for item in results['tracks']['items']:
+            id = item['album']['id']
+            alb = sp.album(id)
+            album = {
+                'name': format_title(alb['name']),
+                'artist': alb['artists'][0]['name'],
+                'release_date': alb['release_date'],
+                'popularity': alb['popularity'],
+                'image_url': alb['images'][1]['url']
+            }
+            if not album in final:
+                final.append(album)
+        return final
+    except KeyError:
+        return None
+
 def search_and_add_tweets(album):
     query = get_sentiment(search(album.title))
     for tweet in query:
@@ -173,7 +194,3 @@ def get_artist_tweets(artist):
         else:
             tweets = tweets | album.tweet_set.all()
     return tweets
-
-def get_album_image(album):
-    sp = spotify_search(album)
-    return sp[4]
