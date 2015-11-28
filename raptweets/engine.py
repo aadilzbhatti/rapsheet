@@ -215,10 +215,12 @@ def construct_matrix():
 
 def get_image(artist):
     sp = spotipy.Spotify()
-    result = sp.search('artist:' + artist.name)
+    result = sp.search('artist:' + artist)
     try:
-        id_ = result['tracks']['items'][0]['artists'][0]['id']
-        artist = sp.artist(id_)
-        return artist['images'][2]['url']
+        for item in result['tracks']['items']:
+            for player in item['artists']:
+                if artist in player.values():
+                    artist = sp.artist(player['id'])
+                    return artist['images'][1]['url']
     except (KeyError, IndexError):
         return None

@@ -20,8 +20,8 @@
     <div class="artists">
     {% for artist in artists %}
         <div id="artist">
-            <img src="{% engine.get_image(artist.name) %}">
-            Name: <a href="{% url 'raptweets:artist_albums' artist.id %}">{{ artist.name }}</a>
+            <h3>Name: <a href="{% url 'raptweets:artist_albums' artist.id %}">{{ artist.name }}</a></h3>
+            <img src="{{ artist.image_url }}">
         </div>
     {% endfor %}
     </div>
