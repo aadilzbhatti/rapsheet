@@ -4,25 +4,24 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Albums for {{ artist.name }}</title>
+    <title>Artists</title>
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-    <nav>
-        <ul class="nav nav-pills">
+    <nav class="nav-justified navbar-right">
+        <ul class="nav nav-pills ">
             <li><a href="{% url 'raptweets:index' %}">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="{% url 'raptweets:artists' %}">Artists</a></li>
         </ul>
     </nav>
-    <h1>Albums for {{ artist.name }}</h1>
-    <div class="albums">
-    {% for album in albums %}
-        <div id="album">
-            <h3>Title: <a href="{%  url 'raptweets:graph' album.id %}">{{ album.title }}</a></h3>
-            <h4>Release Date: {{ album.release_date }}</h4>
-            <img src="{{  album.image_url }}">
+    <h1>All Artists</h1>
+    <div class="artists">
+    {% for artist in artists %}
+        <div id="artist">
+            <img src="{% engine.get_image(artist.name) %}">
+            Name: <a href="{% url 'raptweets:artist_albums' artist.id %}">{{ artist.name }}</a>
         </div>
     {% endfor %}
     </div>

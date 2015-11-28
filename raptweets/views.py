@@ -52,13 +52,11 @@ def tweets(request, album_id):
         t = paginator.page(1)
     except EmptyPage:
         t = paginator.page(paginator.num_pages)
-    return render_to_response('raptweets/tweets.html',
-        {
-            'tweets': t,
-            'album': album,
-            'pages': [num for num in range(1, t.paginator.num_pages)]
-        }
-    )
+    return render(request, 'raptweets/tweets.html', {
+        'tweets': t,
+        'album': album,
+        'pages': [num for num in range(1, t.paginator.num_pages)]
+    })
 
 def graph(request, album_id):
     album = get_object_or_404(Album, pk=album_id)
@@ -97,6 +95,18 @@ def artist_albums(request, artist_id):
     return render(request, 'raptweets/artist_albums.html', {
         'artist': artist,
         'albums': album_list,
+    })
+
+def artists(request):
+    return render(request, 'raptweets/artists.html', {
+        'artists': Artist.objects.all().order_by('name'),
+        'engine': engine
+    })
+
+def artist_graph(request):
+    result = engine.construct_matrix()
+    return render(request, 'raptweets/artist_graph.html', {
+        'result': json.dumps(result)
     })
 
 """

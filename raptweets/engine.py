@@ -4,6 +4,7 @@ from collections import OrderedDict
 import dateutil.parser as parser
 import os
 from textblob import TextBlob
+# import numpy as np
 
 from .models import *
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
@@ -106,7 +107,7 @@ def spotify_search(query):
         popularity = album['popularity']
         image = album['images'][1]['url']
         return name, artist, release_date, popularity, image
-    except KeyError:
+    except (KeyError, IndexError):
         return None
 
 def get_results(query):
@@ -194,3 +195,30 @@ def get_artist_tweets(artist):
         else:
             tweets = tweets | album.tweet_set.all()
     return tweets
+
+def construct_matrix():
+    t = total_tweets_per_artist()
+    total = sum(t.values())
+    # new_total = {}
+    # n = len(t)
+    for key in t:
+        t[key] = (t[key] / total) * 100
+    return t
+    # mat = np.zeros((n, n))
+    # i = 0
+    # track = []
+    # for key in new_total:
+    #     mat[i, i] = new_total[key]
+    #     track.append(key)
+    #     i += 1
+    # return mat * 100, track
+
+def get_image(artist):
+    sp = spotipy.Spotify()
+    result = sp.search('artist:' + artist.name)
+    try:
+        id_ = result['tracks']['items'][0]['artists'][0]['id']
+        artist = sp.artist(id_)
+        return artist['images'][2]['url']
+    except (KeyError, IndexError):
+        return None

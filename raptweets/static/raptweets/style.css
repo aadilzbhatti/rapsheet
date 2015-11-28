@@ -1,6 +1,6 @@
 /* elements */
 
-#tweet, #album {
+#tweet, #album, #artist {
     border: 1px #ccc solid;
 }
 
