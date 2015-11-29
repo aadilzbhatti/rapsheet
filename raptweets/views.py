@@ -13,34 +13,34 @@ def index(request):
 Views for albums
 """
 
+"""
+The search view. Returns a list of albums to match the search query.
+"""
 def search(request):
     query = request.GET.get('q')
     if query:
-        # results = engine.get_results(query)
-        # return render_to_response (
-        #     'raptweets/results.html',
-        #     {
-        #         'results': results
-        #     }
-        # )
-        titles = engine.close_titles()                                  # cache this
-        s = engine.spotify_search(query)
-        if s:
-            if titles:
-                if s[0].lower() in titles:
-                    title = titles[s[0].lower()].title
-                    album = get_object_or_404(Album, title=title)
-                    return graph(request, album.id)
-            album = Album(title=s[0],                                   # get or create
-                          artist=Artist.objects.get_or_create(name=s[1],
-                                                              image_url=engine.get_image(s[1]))[0],
-                          release_date=engine.format_date(s[2]),
-                          popularity=s[3],
-                          image_url=s[4])
-            album.save()
-            return graph(request, album.id)
+        results = engine.get_results(query)
+        album_list = []
+        for item in results:
+            album = Album.objects.get_or_create(
+                title=item['name'],
+                artist=Artist.objects.get_or_create(name=item['artist'],
+                                                    image_url=engine.get_image(item['artist']))[0],
+                release_date=item['release_date'],
+                popularity=item['popularity'],
+                image_url=item['image_url']
+            )[0]
+            if album not in album_list:
+                album_list.append(album)
+        return render(request, 'raptweets/results.html', {
+            'results': album_list,
+            'query': query
+        })
     return HttpResponse('404')
 
+"""
+The tweets view. Allows one to look at all the tweets about a particular album.
+"""
 def tweets(request, album_id):
     album = get_object_or_404(Album, pk=album_id)                       # Query
     engine.search_and_add_tweets(album)
@@ -59,6 +59,10 @@ def tweets(request, album_id):
         'pages': [num for num in range(1, t.paginator.num_pages)]
     })
 
+"""
+Similar to the tweets view, the graph view generates a D3.js scatterplot of the average
+tweet sentiment per day.
+"""
 def graph(request, album_id):
     album = get_object_or_404(Album, pk=album_id)
     engine.search_and_add_tweets(album)
@@ -73,6 +77,9 @@ def graph(request, album_id):
 Views for artists
 """
 
+"""
+All of the tweets about a particular artist
+"""
 def artist_tweets(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
     tweet_list = engine.get_artist_tweets(artist)
@@ -90,6 +97,9 @@ def artist_tweets(request, artist_id):
         'pages': [num for num in range(1, t.paginator.num_pages)]
     })
 
+"""
+All of the albums for a particular artist
+"""
 def artist_albums(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
     album_list = artist.album_set.all().order_by('release_date')
@@ -98,12 +108,18 @@ def artist_albums(request, artist_id):
         'albums': album_list,
     })
 
+"""
+All of the artists
+"""
 def artists(request):
     return render(request, 'raptweets/artists.html', {
         'artists': Artist.objects.all().order_by('name'),
         'engine': engine
     })
 
+"""
+A D3.js visualization of how much people are tweeting about each artist (In Progress).
+"""
 def artist_graph(request):
     result = engine.construct_matrix()
     return render(request, 'raptweets/artist_graph.html', {
@@ -111,9 +127,12 @@ def artist_graph(request):
     })
 
 """
-To run in the background and gather tweets
+Other views
 """
 
+"""
+To run in the background and gather tweets
+"""
 def background(request):
     while True:
         for album in Album.objects.all():

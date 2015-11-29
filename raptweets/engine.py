@@ -116,8 +116,8 @@ def get_results(query):
     results = sp.search(query)
     try:
         for item in results['tracks']['items']:
-            id = item['album']['id']
-            alb = sp.album(id)
+            id_ = item['album']['id']
+            alb = sp.album(id_)
             album = {
                 'name': format_title(alb['name']),
                 'artist': alb['artists'][0]['name'],
@@ -125,7 +125,7 @@ def get_results(query):
                 'popularity': alb['popularity'],
                 'image_url': alb['images'][1]['url']
             }
-            if not album in final:
+            if album not in final:
                 final.append(album)
         return final
     except KeyError:

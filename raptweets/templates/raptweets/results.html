@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -8,4 +10,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </body>
+    <h1>Results for: {{ query }}</h1>
+    <div class="albums">
+        {% for album in results %}
+        <div id="album">
+            <h3><a href="{%  url 'raptweets:artist_albums' album.artist.id %}">{{ album.artist }}</a> - <a href="{% url 'raptweets:graph' album.id %}">{{ album.title }}</a></h3>
+            <h3>Released: {{ album.release_date }}</h3>
+            <img src="{{ album.image_url }}">
+        </div>
+        {% endfor %}
+    </div>
 </html>
