@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^artists/graph', views.artist_graph, name='artist_graph'),
     url(r'^search/', views.search, name='search'),
     url(r'^artists/', views.artists, name='artists'),
+    url(r'^albums/', views.albums, name='albums'),
     url(r'^background/', views.background, name='background')
 ]

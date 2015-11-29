@@ -4,28 +4,28 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Search Results</title>
+    <title>Albums</title>
     <link rel="stylesheet" type="text/css" href="{% static 'raptweets/style.css' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-    <nav>
-        <ul class="nav nav-pills">
+    <nav class="nav-justified navbar-right">
+        <ul class="nav nav-pills ">
             <li><a href="{% url 'raptweets:index' %}">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="{% url 'raptweets:artists' %}">Artists</a></li>
             <li><a href="{% url 'raptweets:albums' %}">Albums</a></li>
         </ul>
     </nav>
-    <h1>Results for: {{ query }}</h1>
+    <h1>All Albums</h1>
     <div class="albums">
-        {% for album in results %}
+    {% for album in albums %}
         <div id="album">
             <h3><a href="{%  url 'raptweets:artist_albums' album.artist.id %}">{{ album.artist }}</a> - <a href="{% url 'raptweets:graph' album.id %}">{{ album.title }}</a></h3>
-            <h3>Released: {{ album.release_date }}</h3>
-            <img src="{{ album.image_url }}">
+            <h4>Released: {{ album.release_date }}</h4>
+            <img src="{{  album.image_url }}">
         </div>
-        {% endfor %}
+    {% endfor %}
     </div>
 </body>
 </html>

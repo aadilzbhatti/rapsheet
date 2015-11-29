@@ -72,6 +72,10 @@ def sentiment(tweet):
     blob = TextBlob(tweet)
     return blob.sentiment.polarity
 
+"""
+Does some movie magic with date objects to make them more
+accessible to Django/D3
+"""
 def format_date(date):
     date = parser.parse(date)
     return date.isoformat()
@@ -79,6 +83,9 @@ def format_date(date):
 def easy_date(date):
     return ' '.join(date.ctime().split()[0:3])
 
+"""
+Computes the average sentiment per day of a set of tweets
+"""
 def average_sentiment_per_day(tweets):
     sentiments = OrderedDict({})
     vals = {}
@@ -95,6 +102,10 @@ def average_sentiment_per_day(tweets):
         sentiments[key] = '%.2f' % sentiments[key]
     return sentiments
 
+"""
+Searches Spotify for an album. Returns a tuple with the title,
+artist, release date, popularity, and an image of the album cover
+"""
 def spotify_search(query):
     sp = spotipy.Spotify()
     result = sp.search(query)
@@ -110,6 +121,11 @@ def spotify_search(query):
     except (KeyError, IndexError):
         return None
 
+
+"""
+Gets a set of albums based on an input query. Meant to replace above
+method.
+"""
 def get_results(query):
     final = []
     sp = spotipy.Spotify()

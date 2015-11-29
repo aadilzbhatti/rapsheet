@@ -26,7 +26,7 @@ def search(request):
                 title=item['name'],
                 artist=Artist.objects.get_or_create(name=item['artist'],
                                                     image_url=engine.get_image(item['artist']))[0],
-                release_date=item['release_date'],
+                release_date=engine.format_date(item['release_date']),
                 popularity=item['popularity'],
                 image_url=item['image_url']
             )[0]
@@ -71,6 +71,11 @@ def graph(request, album_id):
     return render(request, 'raptweets/graph.html', {
         'album': album,
         'avg': json.dumps(avg)
+    })
+
+def albums(request):
+    return render(request, 'raptweets/albums.html', {
+        'albums': Album.objects.all().order_by('title')
     })
 
 """
