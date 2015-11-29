@@ -21,7 +21,7 @@
     <div class="albums">
     {% for album in albums %}
         <div id="album">
-            <h3><a href="{%  url 'raptweets:artist_albums' album.artist.id %}">{{ album.artist }}</a> - <a href="{% url 'raptweets:graph' album.id %}">{{ album.title }}</a></h3>
+            <h3><a href="{%  url 'raptweets:artist_albums' album.artist.id %}">{{ album.artist.name }}</a> - <a href="{% url 'raptweets:graph' album.id %}">{{ album.title }}</a></h3>
             <h4>Released: {{ album.release_date }}</h4>
             <img src="{{  album.image_url }}">
         </div>
