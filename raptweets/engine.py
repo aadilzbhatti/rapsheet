@@ -5,7 +5,6 @@ import dateutil.parser as parser
 import os
 from textblob import TextBlob
 from django.db import IntegrityError
-# import numpy as np
 
 from .models import *
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
