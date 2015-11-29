@@ -4,6 +4,7 @@ from collections import OrderedDict
 import dateutil.parser as parser
 import os
 from textblob import TextBlob
+from django.db import IntegrityError
 # import numpy as np
 
 from .models import *
@@ -150,10 +151,14 @@ def get_results(query):
 def search_and_add_tweets(album):
     query = get_sentiment(search(album.title))
     for tweet in query:
-        Tweet.objects.get_or_create(text=tweet['text'],
-                                    sentiment=tweet['sentiment'],
-                                    pub_date=tweet['date'],
-                                    album=album)
+        try:
+            Tweet.objects.get_or_create(text=tweet['text'],
+                                        sentiment=tweet['sentiment'],
+                                        pub_date=tweet['date'],
+                                        album=album)
+        except IntegrityError:
+            continue
+
     return Tweet.objects.filter(album=album)
 
 def format_title(title):
@@ -181,7 +186,8 @@ def format_title(title):
         '(Softpak)',
         '(Explicit)',
         'Edition',
-        '(Explicit)]'
+        '(Explicit)]',
+        'Explicit)'
     ]
     for word in fluff:
         if word in low:

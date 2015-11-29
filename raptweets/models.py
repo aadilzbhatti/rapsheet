@@ -18,18 +18,13 @@ class Album(models.Model):
         return self.artist.name + ' - ' + self.title
 
 class Tweet(models.Model):
-    text = models.CharField(max_length=140)
+    text = models.CharField(max_length=140, unique=True)
     sentiment = models.FloatField()
     pub_date = models.DateTimeField('date published')
     album = models.ForeignKey(Album)
 
     def __str__(self):
         return str(self.text)
-
-    def create(self, text, sentiment, pub_date):
-        self.text = text
-        self.sentiment = sentiment
-        self.pub_date = pub_date
 
 
 # TODO more relevant tweets
