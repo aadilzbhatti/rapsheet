@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import IntegrityError
 
 import json
 
@@ -22,14 +23,16 @@ def search(request):
         results = engine.get_results(query)
         album_list = []
         for item in results:
-            album = Album.objects.get_or_create(
-                title=item['name'],
-                artist=Artist.objects.get_or_create(name=item['artist'],
-                                                    image_url=engine.get_image(item['artist']))[0],
-                release_date=engine.format_date(item['release_date']),
-                popularity=item['popularity'],
-                image_url=item['image_url']
-            )[0]
+            try:
+                album, created = Album.objects.get_or_create(
+                    title=item['name'],
+                    artist=Artist.objects.get_or_create(name=item['artist'],
+                                                        image_url=engine.get_image(item['artist']))[0],
+                    release_date=engine.format_date(item['release_date']),
+                    image_url=item['image_url']
+                )
+            except IntegrityError:
+                continue
             if album not in album_list:
                 album_list.append(album)
         return render(request, 'raptweets/results.html', {

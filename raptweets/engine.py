@@ -104,7 +104,7 @@ def average_sentiment_per_day(tweets):
 
 """
 Searches Spotify for an album. Returns a tuple with the title,
-artist, release date, popularity, and an image of the album cover
+artist, release date, and an image of the album cover
 """
 def spotify_search(query):
     sp = spotipy.Spotify()
@@ -115,9 +115,8 @@ def spotify_search(query):
         name = format_title(album['name'])
         artist = album['artists'][0]['name']
         release_date = album['release_date']
-        popularity = album['popularity']
         image = album['images'][1]['url']
-        return name, artist, release_date, popularity, image
+        return name, artist, release_date, image
     except (KeyError, IndexError):
         return None
 
@@ -138,7 +137,6 @@ def get_results(query):
                 'name': format_title(alb['name']),
                 'artist': alb['artists'][0]['name'],
                 'release_date': alb['release_date'],
-                'popularity': alb['popularity'],
                 'image_url': alb['images'][1]['url']
             }
             if album not in final:

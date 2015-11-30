@@ -11,11 +11,13 @@ class Album(models.Model):
     title = models.CharField(max_length=100)
     artist = models.ForeignKey(Artist)
     release_date = models.DateTimeField()
-    popularity = models.IntegerField(default=0)
     image_url = models.CharField(max_length=500, default='')
 
     def __str__(self):
         return self.artist.name + ' - ' + self.title
+
+    class Meta:
+        unique_together = ('artist', 'title')
 
 class Tweet(models.Model):
     text = models.CharField(max_length=140, unique=True)
